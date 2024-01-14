@@ -1,0 +1,1 @@
+import { run } from './pkg';

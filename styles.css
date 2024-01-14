@@ -1,0 +1,35 @@
+body {
+  font-family: Courier, Arial, sans-serif, Helvetica;
+  font-size: 1.2em;
+  margin: 2em;
+}
+
+img {
+  margin-right: 1em;
+}
+
+a {
+  color: #222;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  margin-bottom: 1em;
+}
+
+.container {
+  display: flex;
+  align-items: stretch;
+}
+
+.half {
+  width: 66%;
+}
+
+.third {
+  width: 33%;
+  margin-top: 0.333em;
+}
