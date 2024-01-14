@@ -93,7 +93,7 @@ fn appened_restart_link() {
   let document = get_document();
   let container =  document.create_element("div").expect("failed to create div element");
   let link = document.create_element("a").expect("failed to create a element");
-  link.set_attribute("href", "/sin-in-out.html").expect("failed to set href attribute to link");
+  link.set_attribute("href", "/sine-in-out.html").expect("failed to set href attribute to link");
   link.set_text_content(Some("Restart"));
   link.set_attribute("style", DEFAULT_FONT_STYLE).expect("failed to set style attribute to link");
 
