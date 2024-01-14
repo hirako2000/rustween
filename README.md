@@ -36,7 +36,7 @@ Navigate to one of the subfolder of this repo, e.g `elastic_out`
 ```
 
 ```bash
-npm run serve # then open http://localhost:8080
+npm run serve # then open open your browser http://localhost:8080/elastic-out.html
 ```
 
 code changes will automatically reflect in the browser
