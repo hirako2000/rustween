@@ -13,6 +13,10 @@ Rust can compile to many platforms, but also offers first class support for comp
 Wasm applications can also run wasm application locally, as binaries.
 
 
+# Live demo:
+
+[https://rustween.surge.sh/](https://rustween.surge.sh/)
+
 # Prerequisites
 
 - node/npm
