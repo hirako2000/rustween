@@ -6,7 +6,7 @@ This repository contains several mini apps written in Rust.
 - compile to WebAssembly (Wasm) and may be executed in the browser, via the [wasm-bindgen](https://crates.io/crates/wasm-bindgen) crate.
 - Effectively execute the crate's tweening logic in the browser and use the animationFrame API for handling the rendering loop.
 
-**Why wasm**
+**Why Wasm**
 
 Rust can compile to many platforms, but also offers first class support for compilation into Wasm. Browser can execute Wasm applications making their distribution more seamless. Users don't have to install anything.
 
