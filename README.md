@@ -76,12 +76,12 @@ I started this project to learn Rust, while expanding my familiarity with Wasm. 
 ### What have I learnt
 - That Rust is great!
 - That I had forgotten quite a bit about pointers after years of focus on higher level programming languages
-- That I missed and love strong types with low level control: unsigned 8, 32, 64, floats.
-- a bit on type type casting, and that I don't miss implicit coercion at all.
+- That I missed and love strong types with low level control: unsigned/signed integers, 8, 32, 64bits, floats, yay!
+- A bit on type type casting, and that I don't miss implicit coercion at all.
 - That pointers in Rust are in fact simple, that passing of arguments as value, cloning etc is a breeze
 - That Rust projects is be started off with some thoughts on structs and traits to define first! It becomes quickly cumbersome to try to refactor while going along, at least as a beginner.
 - That I would love to see this [issue/PR](https://github.com/rustwasm/wasm-pack/pull/1070) merged into wasm-pack so that I can bundle pkg apps as modules
-
+- That even if it works, I should remember to stop writing so much procedural code and fully adopt OOP.
 
 ### Worklog
 
