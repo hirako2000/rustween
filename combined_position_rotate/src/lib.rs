@@ -3,6 +3,9 @@ use web_sys::{Element, HtmlElement, Document};
 use std::cell::RefCell;
 use std::rc::Rc;
 use tween::Tweener;
+use core::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::{Mutex, Once};
+
 
 const BOX_SIZE: i16 = 20;
 const GRID_SIZE: i16 = 100;
@@ -19,8 +22,10 @@ fn request_animation_frame(f: &Closure<dyn FnMut()>) {
       .expect("should register `requestAnimationFrame` OK");
 }
 
-fn update_square_position(square: &web_sys::Element, x: f32) {
-  let style = format!("background: blue; width: {}px; height: {}px; transform: translate({}px, -{}px);", BOX_SIZE, BOX_SIZE, x, BOX_SIZE / 2);
+fn update_square_position_rotation(square: &web_sys::Element, x: f32, r: f32) {
+  //let style = format!("background: blue; width: {}px; height: {}px; transform: translateX({}px) rotate({}deg), -{}px);", BOX_SIZE, BOX_SIZE, x, r, BOX_SIZE / 2);
+  let style = format!("background: blue; width: {}px; height: {}px; transform: translate({}px, -{}px) rotate({}deg);", BOX_SIZE, BOX_SIZE, x, BOX_SIZE / 2, r);
+
   square.set_attribute("style", &style).expect("error setting style attribute");
 }
 
@@ -37,7 +42,7 @@ fn get_document() -> Document {
 
 fn append_demo_code() {
   let title = get_document().create_element("p").expect("could not create element");
-  title.set_text_content(Some("Bounce In Out Tween..."));
+  title.set_text_content(Some("Position And Rotate Tween..."));
   title.set_attribute("style", "font-size: 1.3em;").expect("failed to set attribute to title");
   get_body().append_child(&title).expect("failed to add title to body");
 
@@ -53,36 +58,40 @@ fn demo_code() -> &'static str {
   use tween::Tweener;
 
   let mut x: f32 = 0.0;
+  let mut r: f32 = 0.0;
+
   let square = append_square();
 
-  let (start, end) = (0, 300);
+  let (position_start, position_end) = (0, 250);
+  let (rotation_start, rotation_end) = (0, 360);
+
   let duration = 3.0; // in seconds
 
-  let mut tweener = Tweener::bounce_in_out(start, end, duration); // default is debouncing at 50%
+  let mut tweener_position = Tweener::sine_in_out(position_start, position_end, duration);
+  let mut tweener_rotation = Tweener::bounce_in_out(rotation_start, rotation_end, duration);
 
   const DT: f32 = 1.0 / 60.0;
 
   // and then in your main loop...
   loop {
 
-    if tweener.is_started() { 
-      status.set_text_content(Some("Tweening Running"));
-    }
-
-    if tweener.is_finished() {
+    if tweener_position.is_finished() && tweener_rotation.is_finished() {
       status.set_text_content(Some("Tweening Finished"));
       break;
     }
 
-    x = tweener.move_by(DT) as f32;
+    x = tweener_position.move_by(DT) as f32;
+    r = tweener_rotation.move_by(DT) as f32;
+
     update_square_position(&square, x as f32);
+    update_square_rotation(&square, r as f32);
   }
 "#;
 }
 
 fn append_home_link() {
   let link = get_document().create_element("a").expect("failed to get dom document");
-  link.set_attribute("href", "/").expect("failed to set href attribute to link link");
+  link.set_attribute("href", "/").expect("failed to set href attribute to link");
   link.set_text_content(Some("All Demos"));
   link.set_id("home");
   link.set_attribute("style", DEFAULT_FONT_STYLE).expect("failed to set style attribute to link");
@@ -93,7 +102,7 @@ fn appened_restart_link() {
   let document = get_document();
   let container =  document.create_element("div").expect("failed to create div element");
   let link = document.create_element("a").expect("failed to create a element");
-  link.set_attribute("href", "/bounce-in-out.html").expect("failed to set href attribute to link link");
+  link.set_attribute("href", "/combined-position-rotate.html").expect("failed to set href attribute to link");
   link.set_text_content(Some("Restart"));
   link.set_attribute("style", DEFAULT_FONT_STYLE).expect("failed to set style attribute to link");
 
@@ -165,7 +174,7 @@ fn axis_legend_gutted_style(margin: i32) -> String {
   return format!("margin-left: {}px; opacity: 0.7; font-family: monospace", margin);
 }
 
-fn bounce_in_out() -> Result<(), JsValue> {
+fn cubic_out() -> Result<(), JsValue> {
     get_body().set_attribute("style", "margin: 1em").expect("failed to set style attribute to body");
     append_home_link();
     append_demo_code();
@@ -173,14 +182,19 @@ fn bounce_in_out() -> Result<(), JsValue> {
     let status = append_status();
 
     let mut x: f32 = 0.0;
+    let mut r: f32 = 0.0;
     let square = append_square(x);
 
     append_axis_labels();
 
-    let (start, end) = (0, 300);
+    let (position_start, position_end) = (0, 250);
+    let (rotation_start, rotation_end) = (0, 360);
+  
     let duration = 3.0; // in seconds
-    let mut tweener = Tweener::bounce_in_out(start - (BOX_SIZE / 2) , end - (BOX_SIZE / 2), duration);
-
+  
+    let mut tweener_position = Tweener::sine_in_out(position_start, position_end, duration);
+    let mut tweener_rotation = Tweener::bounce_in_out(rotation_start, rotation_end, duration);
+    
     let f = Rc::new(RefCell::new(None));
     let g = f.clone();
 
@@ -189,33 +203,35 @@ fn bounce_in_out() -> Result<(), JsValue> {
     appened_restart_link();
     *g.borrow_mut() = Some(Closure::new(move || {
 
-        if tweener.is_started() { 
-          status.set_text_content(Some("Tweening Running"));
-        }
+      if tweener_position.is_started() || tweener_rotation.is_started()  { 
+        status.set_text_content(Some("Tweening Running"));
+      }
 
-        x = tweener.move_by(DT) as f32;
-        match tweener.is_finished() {
-            true => {
-              let _ = f.borrow_mut().take();
-              status.set_text_content(Some("Tweening Finished"));
-              return;
-            }
-            false => (),
-        }
+      x = tweener_position.move_by(DT) as f32;
+      r = tweener_rotation.move_by(DT) as f32;
 
-        update_square_position(&square, x as f32);
+      match tweener_position.is_finished() && tweener_rotation.is_finished() {
+          true => {
+            let _ = f.borrow_mut().take();
+            status.set_text_content(Some("Tweening Finished"));
+            return;
+          }
+          false => (),
+      }
 
-        // Schedule another requestAnimationFrame callback.
-        request_animation_frame(f.borrow().as_ref().unwrap());
+      update_square_position_rotation(&square, x as f32, r as f32);
+
+      // Schedule another requestAnimationFrame callback.
+      request_animation_frame(f.borrow().as_ref().unwrap());
     }));
 
-    request_animation_frame(g.borrow().as_ref().unwrap());
-    Ok(())
+  request_animation_frame(g.borrow().as_ref().unwrap());
+  Ok(())
 }
 
 // Called by the JS entry point
 #[wasm_bindgen(start)]
 fn run() -> Result<(), JsValue> {
-  return bounce_in_out();
+  return cubic_out();
 }
 

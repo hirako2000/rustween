@@ -94,11 +94,19 @@ I started this project to learn Rust, while expanding my familiarity with Wasm. 
 - Look for libs to help with that, read doc ~1h
 
 #### Day 2
-- Integrating wasm, code some simple bindings to create and add dom elements ~90mins
+
+- Integrating Wasm, code some simple bindings to create and add dom elements ~90mins
 - Render a box with a grid background ~ 30 mins
 - Move the box with hard coded values, via animationframe ~ 30 mins
 - Get a loop working that moves the box out the delta and the tween created with some range ~1h
-- clean up all this rs code bit, split large functions into smaller ones ~2h
+- clean up this rusty code bit, split large functions into smaller ones ~2h
 - Change a few types ~1h
 - html page, links etc ~1h
 - Doc etc ~2h. 
+
+#### Day 3
+
+- Added easing animation: cubic in and out ~30mins
+- Added some combined tweeners animation: change of position + rotation ~30mins
+- Added another combined tweeners animation: change of x and y position ~30mins
+- minor adjustments to the root html ~30

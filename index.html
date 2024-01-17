@@ -4,20 +4,20 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <h1>Rustween</h1>
     <div class="container">
       <div class="third"> 
+        <h2><a href="/">Rustween</a></h2>
         <p>
           Easing functions specify the rate of change of a parameter over time.
           Objects in real life don’t just start and stop instantly, and almost never move at a constant speed. 
         </p>
         <hr/>
         <p>
-          These are reproductions of (some of the) visual easing functions from <a href="https://easings.net/">here</a>.
+          These are reproductions of (some of the) visual easing functions found <a href="https://easings.net/">here</a>.
         </p>
         <hr/>
         <p>
-          Coded in Rust, compiled into wasm via <a href="https://crates.io/crates/wasm-bindgen">wasm-bindgen</a> crate, backed by the <a href="https://crates.io/crates/tween">tween</a> library, rendering in real time by leveraging the <a href="https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame">AnimationFrame API</a>.
+          Coded in Rust, compiled into wasm via <a href="https://crates.io/crates/wasm-bindgen">wasm-bindgen</a>, backed by the <a href="https://crates.io/crates/tween">tween</a> library, rendering in real time by leveraging the <a href="https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame">AnimationFrame API</a>.
         </p>
         <hr/>
         <p>
@@ -32,14 +32,16 @@
             <li><a href="./elastic-in.html"><img src="./img/elastic-in.png" height="100px"/>In Elastic</a></li>
             <li><a href="./sine-in-out.html"><img src="./img/sine-in-out.png" height="100px"/>In & Out Sine</a></li>
             <li><a href="./bounce-in-out.html"><img src="./img/bounce-in-out.png" height="100px"/>In & Out Bounce</a></li>
-            <h2>Different values</h2>
-            <li><a href="#">Coming soon - Numbers example</a></li>
+            <li><a href="./cubic-out.html"><img src="./img/cubic-out.png" height="100px"/>Out Cubic</a></li>
+            <li><a href="./cubic-in.html"><img src="./img/cubic-in.png" height="100px"/>In Cubic</a></li>
+
+            <h2>Combining tweens</h2>
+            <li><a href="./combined-position-rotate.html">X Movement + Rotation</a></li>
+            <li><a href="./combined-x-y-position.html">X + Y Movement</a></li>
+
+            <h2>Values</h2>
             <li><a href="#">Coming soon - Arrays example</a></li>
             <li><a href="#">Coming soon - Objects example</a></li>
-            <h2>Other Easings</h2>
-            <li>
-              <a href="#">Coming soon - Easing (Cubic.InOut)</a></li>
-            <li><a href="#">Coming soon - Easing (Bounce.In)</a></li>
           </ul>
         </div>
         <div class="four columns"> 

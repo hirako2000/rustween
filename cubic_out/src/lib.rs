@@ -37,7 +37,7 @@ fn get_document() -> Document {
 
 fn append_demo_code() {
   let title = get_document().create_element("p").expect("could not create element");
-  title.set_text_content(Some("Bounce In Out Tween..."));
+  title.set_text_content(Some("Cubic Out Tween..."));
   title.set_attribute("style", "font-size: 1.3em;").expect("failed to set attribute to title");
   get_body().append_child(&title).expect("failed to add title to body");
 
@@ -55,10 +55,10 @@ fn demo_code() -> &'static str {
   let mut x: f32 = 0.0;
   let square = append_square();
 
-  let (start, end) = (0, 300);
+  let (start, end) = (0, 250);
   let duration = 3.0; // in seconds
 
-  let mut tweener = Tweener::bounce_in_out(start, end, duration); // default is debouncing at 50%
+  let mut tweener = Tweener::cubic_out(start, end, duration);
 
   const DT: f32 = 1.0 / 60.0;
 
@@ -82,7 +82,7 @@ fn demo_code() -> &'static str {
 
 fn append_home_link() {
   let link = get_document().create_element("a").expect("failed to get dom document");
-  link.set_attribute("href", "/").expect("failed to set href attribute to link link");
+  link.set_attribute("href", "/").expect("failed to set href attribute to link");
   link.set_text_content(Some("All Demos"));
   link.set_id("home");
   link.set_attribute("style", DEFAULT_FONT_STYLE).expect("failed to set style attribute to link");
@@ -93,7 +93,7 @@ fn appened_restart_link() {
   let document = get_document();
   let container =  document.create_element("div").expect("failed to create div element");
   let link = document.create_element("a").expect("failed to create a element");
-  link.set_attribute("href", "/bounce-in-out.html").expect("failed to set href attribute to link link");
+  link.set_attribute("href", "/cubic-out.html").expect("failed to set href attribute to link");
   link.set_text_content(Some("Restart"));
   link.set_attribute("style", DEFAULT_FONT_STYLE).expect("failed to set style attribute to link");
 
@@ -165,7 +165,7 @@ fn axis_legend_gutted_style(margin: i32) -> String {
   return format!("margin-left: {}px; opacity: 0.7; font-family: monospace", margin);
 }
 
-fn bounce_in_out() -> Result<(), JsValue> {
+fn cubic_out() -> Result<(), JsValue> {
     get_body().set_attribute("style", "margin: 1em").expect("failed to set style attribute to body");
     append_home_link();
     append_demo_code();
@@ -177,9 +177,9 @@ fn bounce_in_out() -> Result<(), JsValue> {
 
     append_axis_labels();
 
-    let (start, end) = (0, 300);
+    let (start, end) = (0, 250);
     let duration = 3.0; // in seconds
-    let mut tweener = Tweener::bounce_in_out(start - (BOX_SIZE / 2) , end - (BOX_SIZE / 2), duration);
+    let mut tweener = Tweener::cubic_out(start - (BOX_SIZE / 2) , end - (BOX_SIZE / 2), duration);
 
     let f = Rc::new(RefCell::new(None));
     let g = f.clone();
@@ -216,6 +216,6 @@ fn bounce_in_out() -> Result<(), JsValue> {
 // Called by the JS entry point
 #[wasm_bindgen(start)]
 fn run() -> Result<(), JsValue> {
-  return bounce_in_out();
+  return cubic_out();
 }
 

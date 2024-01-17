@@ -19,8 +19,8 @@ fn request_animation_frame(f: &Closure<dyn FnMut()>) {
       .expect("should register `requestAnimationFrame` OK");
 }
 
-fn update_square_position(square: &web_sys::Element, x: f32) {
-  let style = format!("background: blue; width: {}px; height: {}px; transform: translate({}px, -{}px);", BOX_SIZE, BOX_SIZE, x, BOX_SIZE / 2);
+fn update_square_position(square: &web_sys::Element, x: f32, y: f32) {
+  let style = format!("background: blue; width: {}px; height: {}px; transform: translate({}px, {}px);", BOX_SIZE, BOX_SIZE, x, y as f32); // the added space is for the box to be position at its epicenter
   square.set_attribute("style", &style).expect("error setting style attribute");
 }
 
@@ -37,7 +37,7 @@ fn get_document() -> Document {
 
 fn append_demo_code() {
   let title = get_document().create_element("p").expect("could not create element");
-  title.set_text_content(Some("Bounce In Out Tween..."));
+  title.set_text_content(Some("X and Y Position Sine Tweens..."));
   title.set_attribute("style", "font-size: 1.3em;").expect("failed to set attribute to title");
   get_body().append_child(&title).expect("failed to add title to body");
 
@@ -52,37 +52,46 @@ fn demo_code() -> &'static str {
   return r#"
   use tween::Tweener;
 
-  let mut x: f32 = 0.0;
+  let (x_start, x_end) = (0, 300);
+  let (y_start, y_end) = (0, 200);
   let square = append_square();
 
-  let (start, end) = (0, 300);
-  let duration = 3.0; // in seconds
+  let (x_start, x_end) = (0, 300);
+  let (y_start, y_end) = (0, 200);
+  let duration = 2.0; // in seconds
 
-  let mut tweener = Tweener::bounce_in_out(start, end, duration); // default is debouncing at 50%
+  let mut tweener_x = Tweener::sine_in_out(x_start - (BOX_SIZE / 2) , x_end - (BOX_SIZE / 2), duration);
+  let mut tweener_y = Tweener::sine_in_out(y_start - (BOX_SIZE / 2) , y_end - (BOX_SIZE / 2), duration);
 
   const DT: f32 = 1.0 / 60.0;
 
   // and then in your main loop...
   loop {
 
-    if tweener.is_started() { 
+    x = tweener_x.move_by(DT) as f32;
+    y = tweener_y.move_by(DT) as f32;
+
+    if tweener_x.is_started() || tweener_y.is_started() { 
       status.set_text_content(Some("Tweening Running"));
     }
 
-    if tweener.is_finished() {
-      status.set_text_content(Some("Tweening Finished"));
-      break;
+    match tweener_x.is_finished() && tweener_y.is_finished()  {
+      true => {
+        let _ = f.borrow_mut().take();
+        status.set_text_content(Some("Tweening Finished"));
+        return;
+      }
+      false => (),
     }
 
-    x = tweener.move_by(DT) as f32;
-    update_square_position(&square, x as f32);
+    update_square_position(&square, x as f32, y as f32);
   }
 "#;
 }
 
 fn append_home_link() {
   let link = get_document().create_element("a").expect("failed to get dom document");
-  link.set_attribute("href", "/").expect("failed to set href attribute to link link");
+  link.set_attribute("href", "/").expect("failed to set href attribute to link");
   link.set_text_content(Some("All Demos"));
   link.set_id("home");
   link.set_attribute("style", DEFAULT_FONT_STYLE).expect("failed to set style attribute to link");
@@ -93,7 +102,7 @@ fn appened_restart_link() {
   let document = get_document();
   let container =  document.create_element("div").expect("failed to create div element");
   let link = document.create_element("a").expect("failed to create a element");
-  link.set_attribute("href", "/bounce-in-out.html").expect("failed to set href attribute to link link");
+  link.set_attribute("href", "/combined-x-y-position.html").expect("failed to set href attribute to link");
   link.set_text_content(Some("Restart"));
   link.set_attribute("style", DEFAULT_FONT_STYLE).expect("failed to set style attribute to link");
 
@@ -113,7 +122,7 @@ fn append_square(x: f32) -> Element {
 
   let container = document.create_element("div").expect("failed to create dom container");
   container.set_attribute("style", format!("background-image: linear-gradient(rgba(1, 1, 1, 0.1) .1em, transparent .1em), linear-gradient(90deg, rgba(1, 1, 1, 0.1) .1em, transparent .1em);
-  background-size: {}px {}px; height: {}px; margin: {}px;", GRID_SIZE, GRID_SIZE, BOX_SIZE, BOX_SIZE).as_str()).expect("cannot set attribute to container");
+  background-size: {}px {}px; height: {}px; margin: {}px;", GRID_SIZE, GRID_SIZE, GRID_SIZE * 2 + 1, BOX_SIZE).as_str()).expect("cannot set attribute to container");
   container.append_child(&square).expect("Failed to append square to container");
   body.append_child(&container).expect("Failed to append container to body");
 
@@ -165,7 +174,7 @@ fn axis_legend_gutted_style(margin: i32) -> String {
   return format!("margin-left: {}px; opacity: 0.7; font-family: monospace", margin);
 }
 
-fn bounce_in_out() -> Result<(), JsValue> {
+fn x_y_position() -> Result<(), JsValue> {
     get_body().set_attribute("style", "margin: 1em").expect("failed to set style attribute to body");
     append_home_link();
     append_demo_code();
@@ -173,13 +182,17 @@ fn bounce_in_out() -> Result<(), JsValue> {
     let status = append_status();
 
     let mut x: f32 = 0.0;
+    let mut y: f32 = 0.0;
     let square = append_square(x);
 
     append_axis_labels();
 
-    let (start, end) = (0, 300);
-    let duration = 3.0; // in seconds
-    let mut tweener = Tweener::bounce_in_out(start - (BOX_SIZE / 2) , end - (BOX_SIZE / 2), duration);
+    let (x_start, x_end) = (0, 300);
+    let (y_start, y_end) = (0, 200);
+
+    let duration = 2.0; // in seconds
+    let mut tweener_x = Tweener::sine_in_out(x_start - (BOX_SIZE / 2) , x_end - (BOX_SIZE / 2), duration);
+    let mut tweener_y = Tweener::sine_in_out(y_start - (BOX_SIZE / 2) , y_end - (BOX_SIZE / 2), duration);
 
     let f = Rc::new(RefCell::new(None));
     let g = f.clone();
@@ -189,12 +202,14 @@ fn bounce_in_out() -> Result<(), JsValue> {
     appened_restart_link();
     *g.borrow_mut() = Some(Closure::new(move || {
 
-        if tweener.is_started() { 
+        if tweener_x.is_started() || tweener_y.is_started() { 
           status.set_text_content(Some("Tweening Running"));
         }
 
-        x = tweener.move_by(DT) as f32;
-        match tweener.is_finished() {
+        x = tweener_x.move_by(DT) as f32;
+        y = tweener_y.move_by(DT) as f32;
+
+        match tweener_x.is_finished() && tweener_y.is_finished()  {
             true => {
               let _ = f.borrow_mut().take();
               status.set_text_content(Some("Tweening Finished"));
@@ -203,7 +218,7 @@ fn bounce_in_out() -> Result<(), JsValue> {
             false => (),
         }
 
-        update_square_position(&square, x as f32);
+        update_square_position(&square, x as f32, y as f32);
 
         // Schedule another requestAnimationFrame callback.
         request_animation_frame(f.borrow().as_ref().unwrap());
@@ -216,6 +231,6 @@ fn bounce_in_out() -> Result<(), JsValue> {
 // Called by the JS entry point
 #[wasm_bindgen(start)]
 fn run() -> Result<(), JsValue> {
-  return bounce_in_out();
+  return x_y_position();
 }
 

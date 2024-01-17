@@ -58,7 +58,7 @@ fn demo_code() -> &'static str {
   let (start, end) = (0, 250);
   let duration = 2.0; // in seconds
 
-  let mut tweener = sine_in_out(start, end, duration);
+  let mut tweener = Tweener::sine_in_out(start, end, duration);
 
   const DT: f32 = 1.0 / 60.0;
 
