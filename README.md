@@ -110,3 +110,12 @@ I started this project to learn Rust, while expanding my familiarity with Wasm. 
 - Added some combined tweeners animation: change of position + rotation ~30mins
 - Added another combined tweeners animation: change of x and y position ~30mins
 - minor adjustments to the root html ~30
+  
+#### Day 4
+
+Style improvements to the main page:
+- vertical align text links to demos, remove text decoration on those links ~10mins
+- adds radius border to thumbnail images and add some transition on hover from grayscale to color to them ~10mins
+
+Tweener demos adjustments:
+- use new tweener constructor and pass over a current time of 1s so that the tween starts with a delay ~1h

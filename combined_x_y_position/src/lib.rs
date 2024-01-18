@@ -2,7 +2,7 @@ use wasm_bindgen::prelude::{wasm_bindgen, JsValue, Closure, JsCast};
 use web_sys::{Element, HtmlElement, Document};
 use std::cell::RefCell;
 use std::rc::Rc;
-use tween::Tweener;
+use tween::{{Tweener, SineInOut}};
 
 const BOX_SIZE: i16 = 20;
 const GRID_SIZE: i16 = 100;
@@ -50,18 +50,16 @@ fn append_demo_code() {
 
 fn demo_code() -> &'static str {
   return r#"
-  use tween::Tweener;
+  use tween::{{Tweener, SineInOut}};
 
-  let (x_start, x_end) = (0, 300);
-  let (y_start, y_end) = (0, 200);
   let square = append_square();
 
   let (x_start, x_end) = (0, 300);
   let (y_start, y_end) = (0, 200);
-  let duration = 2.0; // in seconds
+  let duration = 2.0;
 
-  let mut tweener_x = Tweener::sine_in_out(x_start - (BOX_SIZE / 2) , x_end - (BOX_SIZE / 2), duration);
-  let mut tweener_y = Tweener::sine_in_out(y_start - (BOX_SIZE / 2) , y_end - (BOX_SIZE / 2), duration);
+  let mut tweener_x = Tweener::new_at(x_start, x_end, duration, SineInOut, in_a_second);
+  let mut tweener_y = Tweener::new_at(y_start, y_end, duration, SineInOut, in_a_second);
 
   const DT: f32 = 1.0 / 60.0;
 
@@ -135,7 +133,7 @@ fn append_status() -> Element {
 
   let status = document.create_element("p").expect("could not create status element");
   status.set_attribute("style", DEFAULT_FONT_STYLE).expect("failed to set style attribute to status");
-  status.set_text_content(Some("Started"));
+  status.set_text_content(Some("Tweening about to start"));
   body.append_child(&status).expect("could not append status to body");
 
   return status;
@@ -189,10 +187,11 @@ fn x_y_position() -> Result<(), JsValue> {
 
     let (x_start, x_end) = (0, 300);
     let (y_start, y_end) = (0, 200);
+    let duration = 2.0;
+    let in_a_second = -1.0;
 
-    let duration = 2.0; // in seconds
-    let mut tweener_x = Tweener::sine_in_out(x_start - (BOX_SIZE / 2) , x_end - (BOX_SIZE / 2), duration);
-    let mut tweener_y = Tweener::sine_in_out(y_start - (BOX_SIZE / 2) , y_end - (BOX_SIZE / 2), duration);
+    let mut tweener_x = Tweener::new_at(x_start - (BOX_SIZE / 2) , x_end - (BOX_SIZE / 2), duration, SineInOut, in_a_second);
+    let mut tweener_y = Tweener::new_at(y_start - (BOX_SIZE / 2) , y_end - (BOX_SIZE / 2), duration, SineInOut, in_a_second);
 
     let f = Rc::new(RefCell::new(None));
     let g = f.clone();

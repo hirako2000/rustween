@@ -2,7 +2,7 @@ use wasm_bindgen::prelude::{wasm_bindgen, JsValue, Closure, JsCast};
 use web_sys::{Element, HtmlElement, Document};
 use std::cell::RefCell;
 use std::rc::Rc;
-use tween::Tweener;
+use tween::{Tweener, BounceInOut};
 
 const BOX_SIZE: i16 = 20;
 const GRID_SIZE: i16 = 100;
@@ -50,15 +50,17 @@ fn append_demo_code() {
 
 fn demo_code() -> &'static str {
   return r#"
-  use tween::Tweener;
+  use tween::{Tweener, BounceInOut};
 
   let mut x: f32 = 0.0;
   let square = append_square();
 
   let (start, end) = (0, 300);
-  let duration = 3.0; // in seconds
+  let duration = 3.0;
+  let in_a_second = -1.0;
 
-  let mut tweener = Tweener::bounce_in_out(start, end, duration); // default is debouncing at 50%
+  // default debouncing is 50%
+  let mut tweener = Tweener::new_at(start, end, duration, BounceInOut, in_a_second); 
 
   const DT: f32 = 1.0 / 60.0;
 
@@ -126,7 +128,7 @@ fn append_status() -> Element {
 
   let status = document.create_element("p").expect("could not create status element");
   status.set_attribute("style", DEFAULT_FONT_STYLE).expect("failed to set style attribute to status");
-  status.set_text_content(Some("Started"));
+  status.set_text_content(Some("Tweening about to start"));
   body.append_child(&status).expect("could not append status to body");
 
   return status;
@@ -178,8 +180,9 @@ fn bounce_in_out() -> Result<(), JsValue> {
     append_axis_labels();
 
     let (start, end) = (0, 300);
-    let duration = 3.0; // in seconds
-    let mut tweener = Tweener::bounce_in_out(start - (BOX_SIZE / 2) , end - (BOX_SIZE / 2), duration);
+    let duration = 3.0;
+    let in_a_second = -1.0;
+    let mut tweener = Tweener::new_at(start - (BOX_SIZE / 2) , end - (BOX_SIZE / 2), duration, BounceInOut, in_a_second);
 
     let f = Rc::new(RefCell::new(None));
     let g = f.clone();

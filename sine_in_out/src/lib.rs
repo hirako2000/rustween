@@ -2,7 +2,7 @@ use wasm_bindgen::prelude::{wasm_bindgen, JsValue, Closure, JsCast};
 use web_sys::{Element, HtmlElement, Document};
 use std::cell::RefCell;
 use std::rc::Rc;
-use tween::Tweener;
+use tween::{Tweener, SineInOut};
 
 const BOX_SIZE: i16 = 20;
 const GRID_SIZE: i16 = 100;
@@ -50,15 +50,16 @@ fn append_demo_code() {
 
 fn demo_code() -> &'static str {
   return r#"
-  use tween::Tweener;
+  use tween::{Tweener, SineInOut};
 
   let mut x: f32 = 0.0;
   let square = append_square();
 
   let (start, end) = (0, 250);
   let duration = 2.0; // in seconds
+  let one_second = -1.0; // delay when tweening starts
 
-  let mut tweener = Tweener::sine_in_out(start, end, duration);
+  let mut tweener = Tweener::new_at(start, end, duration, SineInOut, in_a_second);
 
   const DT: f32 = 1.0 / 60.0;
 
@@ -126,7 +127,7 @@ fn append_status() -> Element {
 
   let status = document.create_element("p").expect("could not create status element");
   status.set_attribute("style", DEFAULT_FONT_STYLE).expect("failed to set style attribute to status");
-  status.set_text_content(Some("Started"));
+  status.set_text_content(Some("Tweening about to start"));
   body.append_child(&status).expect("could not append status to body");
 
   return status;
@@ -179,7 +180,9 @@ fn sine_in_out() -> Result<(), JsValue> {
 
     let (start, end) = (0, 250);
     let duration = 2.0; // in seconds
-    let mut tweener = Tweener::sine_in_out(start - (BOX_SIZE / 2) , end - (BOX_SIZE / 2), duration);
+    let in_a_second = -1.0; // to delay when tweening starts
+
+    let mut tweener = Tweener::new_at(start - (BOX_SIZE / 2) , end - (BOX_SIZE / 2), duration, SineInOut, in_a_second);
 
     let f = Rc::new(RefCell::new(None));
     let g = f.clone();

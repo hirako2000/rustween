@@ -2,10 +2,7 @@ use wasm_bindgen::prelude::{wasm_bindgen, JsValue, Closure, JsCast};
 use web_sys::{Element, HtmlElement, Document};
 use std::cell::RefCell;
 use std::rc::Rc;
-use tween::Tweener;
-use core::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::{Mutex, Once};
-
+use tween::{Tweener, SineInOut, BounceInOut};
 
 const BOX_SIZE: i16 = 20;
 const GRID_SIZE: i16 = 100;
@@ -55,20 +52,20 @@ fn append_demo_code() {
 
 fn demo_code() -> &'static str {
   return r#"
-  use tween::Tweener;
+  use tween::{Tweener, SineInOut, BounceInOut};
 
   let mut x: f32 = 0.0;
   let mut r: f32 = 0.0;
 
   let square = append_square();
 
-  let (position_start, position_end) = (0, 250);
-  let (rotation_start, rotation_end) = (0, 360);
-
+  let (p_start, p_end) = (0, 250);
+  let (r_start, r_end) = (0, 360);
   let duration = 3.0; // in seconds
-
-  let mut tweener_position = Tweener::sine_in_out(position_start, position_end, duration);
-  let mut tweener_rotation = Tweener::bounce_in_out(rotation_start, rotation_end, duration);
+  let in_a_second = -1.0;
+  
+  let mut tweener_position = Tweener::new_at(p_start, p_end, duration, SineInOut, in_a_second);
+  let mut tweener_rotation = Tweener::new_at(r_start, r_end, duration, BounceInOut, in_a_second);
 
   const DT: f32 = 1.0 / 60.0;
 
@@ -135,7 +132,7 @@ fn append_status() -> Element {
 
   let status = document.create_element("p").expect("could not create status element");
   status.set_attribute("style", DEFAULT_FONT_STYLE).expect("failed to set style attribute to status");
-  status.set_text_content(Some("Started"));
+  status.set_text_content(Some("Tweening about to start"));
   body.append_child(&status).expect("could not append status to body");
 
   return status;
@@ -187,14 +184,14 @@ fn cubic_out() -> Result<(), JsValue> {
 
     append_axis_labels();
 
-    let (position_start, position_end) = (0, 250);
-    let (rotation_start, rotation_end) = (0, 360);
-  
+    let (p_start, p_end) = (0, 250);
+    let (r_start, r_end) = (10, 370);
     let duration = 3.0; // in seconds
-  
-    let mut tweener_position = Tweener::sine_in_out(position_start, position_end, duration);
-    let mut tweener_rotation = Tweener::bounce_in_out(rotation_start, rotation_end, duration);
-    
+    let in_a_second = -1.0;
+
+    let mut tweener_position = Tweener::new_at(p_start - (BOX_SIZE / 2) , p_end - (BOX_SIZE / 2), duration, SineInOut, in_a_second);
+    let mut tweener_rotation = Tweener::new_at(r_start - (BOX_SIZE / 2) , r_end - (BOX_SIZE / 2), duration, BounceInOut, in_a_second);
+
     let f = Rc::new(RefCell::new(None));
     let g = f.clone();
 
