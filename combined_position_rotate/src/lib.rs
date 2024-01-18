@@ -72,6 +72,10 @@ fn demo_code() -> &'static str {
   // and then in your main loop...
   loop {
 
+    if tweener_position.is_started() || tweener_rotation.is_started() { 
+      status.set_text_content(Some("Tweening Running"));
+    }
+
     if tweener_position.is_finished() && tweener_rotation.is_finished() {
       status.set_text_content(Some("Tweening Finished"));
       break;
