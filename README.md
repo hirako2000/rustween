@@ -28,7 +28,9 @@ are installed
 
 1. Install npm dependencies
 
-`npm install`
+```bash
+npm install
+```
 
 
 2. dev mode
