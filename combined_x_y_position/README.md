@@ -12,4 +12,4 @@ then
 npm run serve
 ```
 
-open your browser http://localhost:8080/sine-in-out.html
+open your browser http://localhost:8080/combined-x-y-position.html

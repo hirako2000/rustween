@@ -12,4 +12,4 @@ then
 npm run serve
 ```
 
-open your browser http://localhost:8080/elastic-out.html
+open your browser http://localhost:8080/combined-position-rotate.html
