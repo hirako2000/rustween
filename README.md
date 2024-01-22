@@ -72,6 +72,12 @@ npm run deploy
 - [ ] Unit tests
 - [ ] Look into [wasmer](https://github.com/wasmerio/wasmer) to compile into a mono binary that can execute cross platform
 
+## Credits
+
+- of course kudos to the author of the Rust tween library. it prompted the idea to build this in the first place.
+- the many contributors to the dom-binding crate.
+- @sasha240100 for old times inspirations
+
 # About this project
 I started this project to learn Rust, while expanding my familiarity with Wasm. So what's in there ain't to be used as reference of Rust best practices or quality code. And needless to say may contain numerous bugs, such as memory leaks, deadlocks and whatnot. 
 
