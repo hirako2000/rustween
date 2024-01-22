@@ -7,7 +7,7 @@ use tween::{Tweener, ElasticIn};
 const BOX_SIZE: i16 = 20;
 const GRID_SIZE: i16 = 100;
 const AXIS_LABEL_SIZE: i16 = 20;
-const DEFAULT_FONT_STYLE: &str = "font-family: Raleway,HelveticaNeue,Helvetica,Arial,sans-serif;font-size: 1.2em;";
+const DEFAULT_FONT_STYLE: &str = "font-family: Raleway,HelveticaNeue,Helvetica,Arial,sans-serif;font-size: 1.2em; color: #ddd; background: #222";
 
 fn window() -> web_sys::Window {
   web_sys::window().expect("no global `window` exists")
@@ -20,7 +20,7 @@ fn request_animation_frame(f: &Closure<dyn FnMut()>) {
 }
 
 fn update_square_position(square: &web_sys::Element, x: f32) {
-  let style = format!("background: blue; width: {}px; height: {}px; transform: translate({}px, -{}px);", BOX_SIZE, BOX_SIZE, x, BOX_SIZE / 2);
+  let style = format!("background: #4c34b2; width: {}px; height: {}px; transform: translate({}px, -{}px);", BOX_SIZE, BOX_SIZE, x, BOX_SIZE / 2);
   square.set_attribute("style", &style).expect("error setting style attribute");
 }
 
@@ -38,12 +38,12 @@ fn get_document() -> Document {
 fn append_demo_code() {
   let title = get_document().create_element("p").expect("could not create element");
   title.set_text_content(Some("Elastic In Tween..."));
-  title.set_attribute("style", "font-size: 1.3em;").expect("failed to set attribute to title");
+  title.set_attribute("style", DEFAULT_FONT_STYLE).expect("failed to set attribute to title");
   get_body().append_child(&title).expect("failed to add title to body");
 
   let code = get_document().create_element("pre").expect("could not get dom document");
   code.set_text_content(Some(demo_code()));
-  code.set_attribute("style", "background: #11111110; padding: 0.225em;font-size: 0.8em;").expect("Could not set attribute to code element");
+  code.set_attribute("style", "background: #272727; padding: 0.225em;font-size: 0.8em;").expect("Could not set attribute to code element");
   get_body().append_child(&code).expect("cannot add code element to body");
 }
 
@@ -109,11 +109,11 @@ fn append_square(x: f32) -> Element {
   let body = get_body();
 
   let square = document.create_element("div").expect("failed to get dom document");
-  square.set_attribute("style", &format!("transformX({}px)", x)).expect("failed to set style attribute to square");
+  square.set_attribute("style", &format!("background: #4c34b2; transform: translateX({}px)", x)).expect("failed to set style attribute to square");
   square.set_id("square");
 
   let container = document.create_element("div").expect("failed to create dom container");
-  container.set_attribute("style", format!("background-image: linear-gradient(rgba(1, 1, 1, 0.1) .1em, transparent .1em), linear-gradient(90deg, rgba(1, 1, 1, 0.1) .1em, transparent .1em);
+  container.set_attribute("style", format!("background-image: linear-gradient(rgb(255 255 255 / 15%) 0.1em, transparent 0.1em), linear-gradient(90deg, rgb(255 255 255 / 15%) 0.1em, transparent 0.1em);
   background-size: {}px {}px; height: {}px; margin: {}px;", GRID_SIZE, GRID_SIZE, BOX_SIZE, BOX_SIZE).as_str()).expect("cannot set attribute to container");
   container.append_child(&square).expect("Failed to append square to container");
   body.append_child(&container).expect("Failed to append container to body");
@@ -167,7 +167,7 @@ fn axis_legend_gutted_style(margin: i32) -> String {
 }
 
 fn elastic_in() -> Result<(), JsValue> {
-    get_body().set_attribute("style", "margin: 1em").expect("failed to set style attribute to body");
+    get_body().set_attribute("style", "margin: 1em; color: #ddd; background: #222").expect("failed to set style attribute to body");
     append_home_link();
     append_demo_code();
 

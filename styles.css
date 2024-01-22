@@ -2,22 +2,27 @@ body {
   font-family: Courier, Arial, sans-serif, Helvetica;
   font-size: 1.2em;
   margin: 2em;
+  color: #ddd;
+  background: #222;
 }
 
 img {
   margin-right: 1em;
-  filter: grayscale(1) contrast(0.9);
+  filter: grayscale(1) contrast(0.85);
   border-radius: 4px;
 }
 
 img:hover {
-  opacity: 1;
-  filter: grayscale(0)  contrast(1);
+  filter: grayscale(0) contrast(0.78);
   transition: filter .2s ease-in;
 }
 
 a {
-  color: #222;
+  color: #ddd;
+}
+
+a:hover {
+  color: #fff;
 }
 
 ul {
@@ -28,14 +33,36 @@ li {
   margin-bottom: 1em;
 }
 
-.up50px {
+.nudge-up {
   position: relative;
-  top: -50px;
   display: inline;
+  top: -48px;
+  left: -1em;
 }
 
-.no-decor {
-  text-decoration: none;
+.img-link {
+  text-underline-offset: -45px;
+}
+
+.img-link:hover {
+  > .div {
+    filter: contrast(1.6);
+    transition: filter 0.3s easin-in-out;
+  }
+
+   > .img {
+    filter: contrast(0.85);
+    transition: filter 0.3s ease-in-out;
+  }
+}
+
+.imgless-link {
+  text-underline-offset: 2px;
+}
+
+.imgless-link:hover {
+  filter: contrast(1.6);
+  transition: filter 0.3s easin-in-out;
 }
 
 .container {
