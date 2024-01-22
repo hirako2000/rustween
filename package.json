@@ -21,7 +21,7 @@
     "copy:combinedpositionrotate": "cp -r ./combined_position_rotate/dist/* ./web/",
     "build:combinedxyposition": "cd combined_x_y_position&& npm run build && cd ..",
     "copy:combinedxyposition": "cp -r ./combined_x_y_position/dist/* ./web/",
-    "copy:assets": "cp index.html ./web/ && cp -r img ./web/ && cp styles.css ./web/",
+    "copy:assets": "cp index.html ./web/ && cp -r img ./web/ && cp styles.css ./web/ && cp ./favico/* ./web/",
     "build:all": "rm -rf web && mkdir -p web && npm run build:elasticout && npm run copy:elasticout && npm run build:elasticin && npm run copy:elasticin && npm run build:sineinout && npm run copy:sineinout && npm run build:bounceinout && npm run copy:bounceinout && npm run build:cubicin && npm run copy:cubicin && npm run build:cubicout && npm run copy:cubicout && npm run build:combinedpositionrotate && npm run copy:combinedpositionrotate && npm run build:combinedxyposition && npm run copy:combinedxyposition && npm run copy:assets",
     "deploy": "surge web"
   },
