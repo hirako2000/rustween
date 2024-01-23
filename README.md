@@ -66,13 +66,16 @@ npm run deploy
 # TODO
 
 - [x] App demo-ing the elastic out tween
+- [x] Demos of another half a dozen common tweens
+- [x] Couple of demos of combined tweens
 - [ ] Refactor with proper structs to keep pointers to dom elements: Looking up dom elements is expensive
 - [ ] Make use of traits and modules for code reusability
 - [ ] More comments
+- [x] Deploy
 - [ ] Unit tests
 - [ ] Look into [wasmer](https://github.com/wasmerio/wasmer) to compile into a mono binary that can execute cross platform
 
-## Credits
+## Credit
 
 - of course kudos to the author of the Rust tween library. it prompted the idea to build this in the first place.
 - the many contributors to the dom-binding crate.
@@ -127,3 +130,13 @@ Style improvements to the main page:
 
 Tweener demos adjustments:
 - use new tweener constructor and pass over a current time of 1s so that the tween starts with a delay ~1h
+
+#### Day 5
+
+More restyling:
+- Dark theme! ~1h
+- Clean up image thumbnails from artifacts ~10mins
+- align elements for good, adds back underlines to links ~30mins
+
+Test/Fixes:
+- Fixed paths in subREADMEs and other minor fixes ~30 mins
